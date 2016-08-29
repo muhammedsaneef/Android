@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Touch</string>
+    <string name="buttonText">Click Me</string>
+    <string name="welcomeMessage">Welcome to button click</string>
+    <string name="countValueString">Number of Clicks:</string>
+    <string name="countOfClicks">0</string>
+    <string name="resetText">Reset count</string>
+
+</resources>
