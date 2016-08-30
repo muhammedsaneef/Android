@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ArithmeticOps</string>
+    <string name="app_name">Calculate</string>
     <string name="button1Label">1</string>
     <string name="button2Label">2</string>
     <string name="button3Label">3</string>
