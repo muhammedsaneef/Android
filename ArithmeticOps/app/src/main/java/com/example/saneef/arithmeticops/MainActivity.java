@@ -11,19 +11,19 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    float number1,number2,resultValue;
+    float operand1,operand2,resultValue;
     char op;
     TextView resultField;
-    EditText num1,num2;
+    EditText contentOfNumber1,contentOfNumber2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         resultField=(TextView)findViewById(R.id.textView);
-        num1=(EditText)findViewById(R.id.number1);
-        num2=(EditText)findViewById(R.id.number2);
-        number1=0;
-        number2=0;
+        contentOfNumber1=(EditText)findViewById(R.id.number1);
+        contentOfNumber2=(EditText)findViewById(R.id.number2);
+        operand1=0;
+        operand2=0;
     }
     public void displayResult(float valueToDisplay)
     {
@@ -31,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void clearField(View v)
     {
-        number1=0;
-        number2=0;
+        operand1=0;
+        operand2=0;
         resultValue=0;
-        num1.setText("0");
-        num2.setText("0");
+        contentOfNumber1.setText("");
+        contentOfNumber2.setText("");
         displayResult(resultValue);
     }
     public void operationPerformed(View v) {
@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         Button buttonPressed = (Button) v;
         op = buttonPressed.getText().charAt(0);
         try {
-            number1 = Float.parseFloat(num1.getText().toString());
-            number2 = Float.parseFloat(num2.getText().toString());
+            operand1 = Float.parseFloat(contentOfNumber1.getText().toString());
+            operand2 = Float.parseFloat(contentOfNumber2.getText().toString());
         }
         catch (Exception ex)
         {
@@ -54,20 +54,20 @@ public class MainActivity extends AppCompatActivity {
 
             {
                 case '+':
-                    resultValue = number1 + number2;
+                    resultValue = operand1 + operand2;
                     displayResult(resultValue);
                     break;
                 case '-':
-                    resultValue = number1 - number2;
+                    resultValue = operand1-operand2;
                     displayResult(resultValue);
                     break;
                 case '*':
-                    resultValue = number1 * number2;
+                    resultValue = operand1*operand2;
                     displayResult(resultValue);
                     break;
                 case '/':
-                    if (number2 != 0) {
-                        resultValue = number1 / number2;
+                    if (operand2 != 0) {
+                        resultValue = operand1 / operand2;
                         displayResult(resultValue);
                     } else {
                         Toast.makeText(this, "Cannot divide by zero", Toast.LENGTH_SHORT).show();
