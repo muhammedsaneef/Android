@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    tools:context="com.example.saneef.linearlayoutexample.MainActivity"
+    android:gravity="right"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:layout_gravity="left|right"
+        android:padding="5dp"
+        android:textSize="20dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/description"
+        android:padding="5dp"
+        android:layout_gravity="left" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/buttonText"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"/>
+    <!-- for borderless button
+          style="?android:attr/borderlessButtonStyle"
+         -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="50dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Layout with horizontal orientation."
+            android:gravity="left"
+            android:layout_gravity="left"
+            />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:weightSum="1"
+            android:padding="0dp">
+
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/yourname"
+            android:layout_weight="0.99" />
+            <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_me"
+                android:padding="2dp" />
+</LinearLayout>
+
+</LinearLayout>
+
