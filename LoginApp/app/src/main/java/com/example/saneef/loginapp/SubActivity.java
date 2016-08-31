@@ -3,13 +3,13 @@ package com.example.saneef.loginapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
+
 import android.widget.TextView;
 
 public class SubActivity extends AppCompatActivity {
 
 
-    @Override
+  @Override
     public void onBackPressed() {
         startActivity(new Intent(this,MainActivity.class));
         finish();
@@ -20,8 +20,8 @@ public class SubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
         Intent newIntent=getIntent();
-        TextView givenUsername=(TextView)findViewById(R.id.textView2);
-        TextView givenPassword=(TextView)findViewById(R.id.textView4);
+        TextView givenUsername=(TextView)findViewById(R.id.usernameField);
+        TextView givenPassword=(TextView)findViewById(R.id.passwordField);
         String welcomeUser=givenUsername.getText().toString()+" "+newIntent.getStringExtra("Username");
         String password=givenPassword.getText().toString()+" "+newIntent.getStringExtra("Password");
         givenUsername.setText(welcomeUser);
