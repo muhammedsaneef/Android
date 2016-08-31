@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">LoginApp</string>
+    <string name="welcome">Welcome</string>
+    <string name="buttontext">Login</string>
+    <string name="welcome_to_app">Welcome </string>
+    <string name="description">Password : </string>
+    <string name="welcomeSignUp">Welcome</string>
+    <string name="submit">Submit</string>
+    <string name="sign_up">New User</string>
+</resources>
