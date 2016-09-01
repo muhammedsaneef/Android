@@ -1,6 +1,7 @@
 package com.example.saneef.loginapp;
 
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,11 +15,15 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     private List<Person> users;
+    SharedPreferences localDb;
+    SharedPreferences.Editor localDbEditor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         users =new ArrayList<>();
+        localDb=getSharedPreferences("userData",0);
+        localDbEditor=localDb.edit();
     }
 
     public List<Person> getUsers() {
@@ -48,6 +53,8 @@ public class SignUpActivity extends AppCompatActivity {
             newUser.setPassword(password);
             //Add object to users list
             users.add(newUser);
+            localDbEditor.putString(username,personName+","+password);
+            localDbEditor.commit();
 
             //startActivity(new Intent(this,MainActivity.class));
             finish();

@@ -23,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/passwordField"
-        android:layout_marginTop="54dp"
         android:text="@string/description"
-        android:layout_below="@+id/textView2"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/usernameField"
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignStart="@+id/textView3" />
 
@@ -45,8 +45,28 @@
         android:text="@string/username"
         android:id="@+id/usernameField"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/personName"
         android:layout_alignLeft="@+id/passwordField"
         android:layout_alignStart="@+id/passwordField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/personName"
+        android:id="@+id/personName"
+        android:layout_marginTop="33dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/textView2"
+        android:layout_toRightOf="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:id="@+id/textView4"
+        android:layout_alignTop="@+id/personName"
+        android:layout_alignLeft="@+id/usernameField"
+        android:layout_alignStart="@+id/usernameField" />
 
 </RelativeLayout>

@@ -9,4 +9,7 @@
     <string name="sign_up">New User</string>
     <string name="profileInfo">Profile Information</string>
     <string name="username">Username:</string>
+    <string name="personName">:</string>
+    <string name="name">Name</string>
+    <string name="clear_all">Clear All</string>
 </resources>
