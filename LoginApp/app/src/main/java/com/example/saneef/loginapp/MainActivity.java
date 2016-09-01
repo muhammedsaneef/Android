@@ -9,12 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity //implements View.OnClickListener
 {
 
     String username,password;
 
-
+    SignUpActivity loginCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +25,24 @@ public class MainActivity extends AppCompatActivity //implements View.OnClickLis
         setContentView(R.layout.activity_main);
         //Button b=(Button)findViewById(R.id.button);
         //b.setOnClickListener(this);
-        username="";
+        loginCheck =new SignUpActivity();
+
     }
 
 
+    public boolean isUserPresent(List<Person> users,String username)
+    {
+        boolean userPresent=false;
+        for(Person person :users)
+        {
+            if(person.getUserName().equals(username))
+            {
+                userPresent=true;
+            }
 
+        }
+        return userPresent;
+    }
     public void login(View v)
     {
 
@@ -38,20 +54,23 @@ public class MainActivity extends AppCompatActivity //implements View.OnClickLis
         if(!username.isEmpty() && !password.isEmpty())
         {
 
-            Intent loginActivity=new Intent(this,SubActivity.class);
-            loginActivity.putExtra("Username",username);
-            loginActivity.putExtra("Password",password);
-            startActivity(loginActivity);
-            finish();
+
+                    Intent loginActivity = new Intent(this, SubActivity.class);
+                    loginActivity.putExtra("Username", username);
+                    loginActivity.putExtra("Password", password);
+                    startActivity(loginActivity);
+                    finish();
+
+
         }
         else if (username.isEmpty())
         {
-            Toast alertUser=Toast.makeText(this,"Enter valid name",Toast.LENGTH_SHORT);
+            Toast alertUser=Toast.makeText(this,"Enter username",Toast.LENGTH_SHORT);
             alertUser.show();
         }
         else
         {
-            Toast alertUser=Toast.makeText(this,"Enter valid password",Toast.LENGTH_SHORT);
+            Toast alertUser=Toast.makeText(this,"Enter password",Toast.LENGTH_SHORT);
             alertUser.show();
         }
 

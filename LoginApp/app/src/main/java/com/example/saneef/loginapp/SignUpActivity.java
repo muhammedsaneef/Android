@@ -7,27 +7,48 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SignUpActivity extends AppCompatActivity {
 
-    String personName,username,password;
+
+    private List<Person> users;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        users =new ArrayList<>();
     }
+
+    public List<Person> getUsers() {
+        return users;
+    }
+
     public void submitProfile(View v)
     {
+        String personName,username,password;
         EditText personNameField=(EditText)findViewById(R.id.personName);
         EditText usernameField=(EditText)findViewById(R.id.userName);
         EditText passwordField=(EditText)findViewById(R.id.password);
+        //get contents of profile information
         personName=personNameField.getText().toString();
         username=usernameField.getText().toString();
         password=passwordField.getText().toString();
+        //create Toast for giving user feedback
         Toast userFeedback=Toast.makeText(this,"message",Toast.LENGTH_SHORT);
         if(!personName.isEmpty() && !username.isEmpty() && !password.isEmpty())
         {
 
             userFeedback.setText("Profile created");
+            //create object of new user
+            Person newUser =new Person();
+            newUser.setPersonName(personName);
+            newUser.setUserName(username);
+            newUser.setPassword(password);
+            //Add object to users list
+            users.add(newUser);
+
             //startActivity(new Intent(this,MainActivity.class));
             finish();
         }
