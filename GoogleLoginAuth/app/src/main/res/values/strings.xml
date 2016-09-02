@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Google Login</string>
+    <string name="enter_email_ID">Enter your email</string>
+
+    <string name="sign_in">Sign In</string>
+    <string name="display_name">Display Name:</string>
+    <string name="email_address">Email:</string>
+    <string name="user_id">User ID:</string>
+    <string name="profile_info">Profile Information</string>
+    <string name="sign_out">Sign Out</string>
+</resources>
