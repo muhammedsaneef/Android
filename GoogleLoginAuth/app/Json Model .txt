@@ -1,0 +1,59 @@
+{
+ "connections": [
+  {
+   "resourceName": "people/100725426865045327340",
+   "etag": "IVvdzPyWdq4=",
+   "names": [
+    {
+     "metadata": {
+      "primary": true,
+      "source": {
+       "type": "CONTACT",
+       "id": "3530b9758a3364b2"
+      }
+     },
+     "displayName": "Ajinas Hamza",
+     "familyName": "Hamza",
+     "givenName": "Ajinas",
+     "displayNameLastFirst": "Hamza, Ajinas"
+    },
+    {
+     "metadata": {
+      "source": {
+       "type": "DOMAIN_PROFILE",
+       "id": "100725426865045327340"
+      }
+     },
+     "displayName": "Ajinas Hamza",
+     "familyName": "Hamza",
+     "givenName": "Ajinas",
+     "displayNameLastFirst": "Hamza, Ajinas"
+    }
+   ],
+   "emailAddresses": [
+    {
+     "metadata": {
+      "primary": true,
+      "verified": true,
+      "source": {
+       "type": "DOMAIN_PROFILE",
+       "id": "100725426865045327340"
+      }
+     },
+     "value": "ajinas@qburst.com"
+    },
+    {
+     "metadata": {
+      "source": {
+       "type": "CONTACT",
+       "id": "3530b9758a3364b2"
+      }
+     },
+     "value": "ajinas@qburst.com"
+    }
+   ]
+  }
+ ],
+ "nextPageToken": "CAEQ97mNv_Aq",
+ "nextSyncToken": "COfrjL_wKhIBMRiEEyoECAAQAQ"
+}

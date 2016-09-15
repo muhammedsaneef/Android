@@ -1,46 +1,49 @@
 package com.example.saneef.googleloginauth;
 
+
 import android.content.Intent;
+
+import android.net.Uri;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Toast;
+
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
+
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.auth.api.*;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.Scope;
 
-import static android.widget.Toast.*;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 9001;
     GoogleSignInOptions googleSignInOptions;
     GoogleApiClient googleApiClient;
+
     GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener;
     Intent loginActivity;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        onConnectionFailedListener =new GoogleApiClient.OnConnectionFailedListener() {
-            @Override
-            public void onConnectionFailed(ConnectionResult connectionResult)
-            {
 
-            }
-        };
         googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+                .requestEmail().requestScopes(new Scope(Scopes.PROFILE)).build();
         googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this,onConnectionFailedListener).addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions).build();
-       loginActivity=new Intent(this,LoginActivity.class);
+
+
     }
 
     public void performGoogleAuthentication(View v)
@@ -63,31 +66,46 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(GoogleSignInResult result) {
         //Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
+
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            String userDisplayName=acct.getDisplayName();
-            String email=acct.getEmail();
-            String user_id=acct.getId();
 
 
+                String userDisplayName = acct.getDisplayName();
+                String email = acct.getEmail();
+                String user_id = acct.getId();
+                Uri photo_url = acct.getPhotoUrl();
 
-            loginActivity.putExtra("displayName",userDisplayName);
+               loginActivity=new Intent(this,LoginActivity.class);
 
-            loginActivity.putExtra("email",email);
-            loginActivity.putExtra("userID",user_id);
+
+                if(photo_url!=null) {
+                    loginActivity.putExtra("photo_url", photo_url.toString());
+
+                }
+                else
+                {
+                    loginActivity.putExtra("photo_url", "Profile picture not available.");
+                }
+                if(userDisplayName!=null)
+                {
+                    loginActivity.putExtra("displayName", userDisplayName);
+                }
+            else{
+                    loginActivity.putExtra("displayName", "Display Name.");
+                }
+
+                loginActivity.putExtra("email", email);
+                loginActivity.putExtra("userID", user_id);
+
+
             //navigate to second activity
             startActivity(loginActivity);
-            if(googleApiClient.isConnected())
-            {
-                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
 
-                            }
-                        });
-            }
-
+        }
+        else
+        {
+            Toast.makeText(this,"Connection error",Toast.LENGTH_SHORT).show();
         }
 
     }

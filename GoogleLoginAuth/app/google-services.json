@@ -13,15 +13,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "130005812202-si855gjk1c8dkkilbr8220d9398vg371.apps.googleusercontent.com",
+          "client_id": "130005812202-0fpo25l0ar6ljolq68hnobgqpuubihl3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBda5U35mCxgxSswMP2c0VJTC7S7LKYdZE"
-        }
-      ],
+      "api_key": [],
       "services": {
         "analytics_service": {
           "status": 1
@@ -44,7 +40,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "130005812202-mjv52b26moqnb9pm7aj1da4nq0nrmika.apps.googleusercontent.com",
+          "client_id": "130005812202-jig4tvullsdfoghhg9fsv6oh2osc70cu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.saneef.googleloginauth",
@@ -52,7 +48,7 @@
           }
         },
         {
-          "client_id": "130005812202-si855gjk1c8dkkilbr8220d9398vg371.apps.googleusercontent.com",
+          "client_id": "130005812202-0fpo25l0ar6ljolq68hnobgqpuubihl3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

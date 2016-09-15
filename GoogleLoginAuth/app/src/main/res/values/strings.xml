@@ -4,8 +4,14 @@
 
     <string name="sign_in">Sign In</string>
     <string name="display_name">Display Name:</string>
-    <string name="email_address">Email:</string>
-    <string name="user_id">User ID:</string>
+    <string name="email_address">:</string>
+    <string name="user_id">:</string>
     <string name="profile_info">Profile Information</string>
     <string name="sign_out">Sign Out</string>
+    <string name="view_contacts">View Contacts</string>
+    <string name="email">Email:</string>
+    <string name="user_id_">User ID:</string>
+    <string name="profile_information">Profile Information</string>
+    <string name="sign_out_">Sign Out</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>
