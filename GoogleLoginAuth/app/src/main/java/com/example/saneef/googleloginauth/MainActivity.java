@@ -23,6 +23,7 @@ import com.google.android.gms.auth.api.*;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.signin.internal.AuthAccountResult;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.services.people.v1.People;
 import com.google.api.services.people.v1.PeopleScopes;
 
 import java.util.Set;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestServerAuthCode(Constants.web_client_id).requestScopes(new Scope(PeopleScopes.CONTACTS_READONLY)).build();
+        googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestServerAuthCode(Constants.web_client_id).requestScopes(new Scope(PeopleScopes.CONTACTS_READONLY),new Scope(PeopleScopes.USERINFO_PROFILE),new Scope(PeopleScopes.PLUS_LOGIN)).build();
         googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this,onConnectionFailedListener).addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions).build();
 
 

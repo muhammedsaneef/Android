@@ -180,6 +180,10 @@ public class LoginActivity extends AppCompatActivity {
                 //loadAuthorizationUrl();
                 RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
 
+                Button contacts_button=(Button)findViewById(R.id.view_user_contacts);
+                contacts_button.setVisibility(View.INVISIBLE);
+                contacts_button.setClickable(false);
+
                 Retrofit retrofitObject=retrofitBuilder.getTokenRetrofit();
 
                     getAccessToken(retrofitObject);
@@ -347,9 +351,7 @@ public class LoginActivity extends AppCompatActivity {
                    extractContactDetails(contacts);
                    TextView contacts_label=(TextView)findViewById(R.id.label_contacts);
                    contacts_label.setVisibility(View.VISIBLE);
-                   Button contacts_button=(Button)findViewById(R.id.view_user_contacts);
-                   contacts_button.setVisibility(View.INVISIBLE);
-                   contacts_button.setClickable(false);
+
                }
                 else
                {
@@ -377,11 +379,28 @@ public class LoginActivity extends AppCompatActivity {
 
         for (Connections contact:contacts)
         {
-            String displayName=contact.getNames().get(0).getDisplayName();
-            String emailAddress=contact.getEmailAddresses().get(0).getValue();
-            Person person=new Person(displayName,emailAddress);
-            listAdapter.add(person);
-            listAdapter.notifyDataSetChanged();
+            String displayName,emailAddress;
+                if(contact.getNames()!=null) {
+                     displayName = contact.getNames().get(0).getDisplayName();
+                }
+            else
+                {
+                    displayName="Display Name N/A";
+                }
+
+            if(contact.getEmailAddresses()!=null) {
+                emailAddress = contact.getEmailAddresses().get(0).getValue();
+            }
+            else
+            {
+               emailAddress="Email Address N/A";
+            }
+
+
+                Person person = new Person(displayName, emailAddress);
+
+                listAdapter.add(person);
+                listAdapter.notifyDataSetChanged();
 
         }
 
