@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ListView</string>
+    <string name="name">Name</string>
+    <string name="phone_no">9895112233</string>
+    <string name="add">Add</string>
+    <string name="ok">Ok</string>
+</resources>

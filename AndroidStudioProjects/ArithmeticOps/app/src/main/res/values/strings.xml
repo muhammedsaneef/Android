@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Calculate</string>
+    <string name="button1Label">1</string>
+    <string name="button2Label">2</string>
+    <string name="button3Label">3</string>
+    <string name="button4Label">4</string>
+    <string name="button5Label">5</string>
+    <string name="button6Label">6</string>
+    <string name="button9Label">9</string>
+    <string name="button8Label">8</string>
+    <string name="button7Label">7</string>
+    <string name="button0Label">0</string>
+    <string name="resultText">Result:</string>
+    <string name="resultValue">0</string>
+</resources>

@@ -8,9 +8,12 @@ import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -37,9 +40,12 @@ import com.google.api.services.people.v1.People;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import RetrofitClass.Constants;
+import RetrofitClass.JsonModel.Connections;
 import RetrofitClass.JsonModel.PeopleAPI;
+import RetrofitClass.JsonModel.Person;
 import RetrofitClass.JsonModel.ServerResponse;
 import RetrofitClass.JsonModel.TokenExchangeResponse;
 import RetrofitClass.RetrofitBuilder;
@@ -53,12 +59,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private RecyclerView mRecyclerView;
+    private ListAdapter listAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     GoogleSignInOptions googleSignInOptions;
     GoogleApiClient googleApiClient;
     Dialog authorization_window;
     GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener;
     WebView browser;
     private String access_token;
+    private String refresh_token;
     private String authorization_code;
 
     private void loadAuthorizationUrl()
@@ -100,15 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.v("AuthCode",authorization_code);
                     if(!authorization_code.isEmpty())
                     {
-                        Thread thread = new Thread() {
-                            @Override
-                            public void run() {
 
-                                requestContacts();
-                            }
-                        };
-
-                        thread.start();
                     }
 
                 }
@@ -148,6 +151,22 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.collapsible_layout);
         //configure google sign_in
         googleSetup();
+
+
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_user_contacts);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+        ArrayList<Person> contacts=new ArrayList<>();
+
+
+
+        listAdapter= new ListAdapter(contacts);
+        mRecyclerView.setAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
         //find button views
         Button view_contacts_button=(Button)findViewById(R.id.view_user_contacts);
        FloatingActionButton sign_out_fab =(FloatingActionButton)findViewById(R.id.fab);
@@ -161,41 +180,12 @@ public class LoginActivity extends AppCompatActivity {
                 //loadAuthorizationUrl();
                 RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
 
-               Retrofit retrofitObject=retrofitBuilder.getTokenRetrofit();
-                ServiceAPI serviceAPI=retrofitObject.create(ServiceAPI.class);
+                Retrofit retrofitObject=retrofitBuilder.getTokenRetrofit();
 
-                Call<TokenExchangeResponse> request_Token =  serviceAPI.getAccessToken(authorization_code,Constants.REDIRECT_URI,Constants.web_client_id,Constants.web_client_secret,"authorization_code");
-                request_Token.enqueue(new Callback<TokenExchangeResponse>() {
-                    @Override
-                    public void onResponse(Call<TokenExchangeResponse> call, Response<TokenExchangeResponse> response) {
-                        //Log.v("response",response.body().toString());
-                        access_token=response.body().getAccess_token();
-                        Log.v("Token",access_token);
-                    }
+                    getAccessToken(retrofitObject);
 
-                    @Override
-                    public void onFailure(Call<TokenExchangeResponse> call, Throwable t) {
 
-                        Log.v("TokenFailure",t.toString());
-                    }
-                });
 
-                retrofitObject=retrofitBuilder.getContactsRetrofit();
-
-                PeopleAPI peopleAPI=retrofitObject.create(PeopleAPI.class);
-                String bearer_access="Bearer "+access_token;
-                Call<ServerResponse> request_Contacts=peopleAPI.getContacts(1,"person.names,person.email_addresses",bearer_access);
-                request_Contacts.enqueue(new Callback<ServerResponse>() {
-                    @Override
-                    public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                        Log.v("Contacts",response.body().toString());
-                    }
-
-                    @Override
-                    public void onFailure(Call<ServerResponse> call, Throwable t) {
-
-                    }
-                });
 
             }
         });
@@ -297,7 +287,8 @@ public class LoginActivity extends AppCompatActivity {
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override
-                        public void onResult(Status status) {
+                        public void onResult(Status status)
+                        {
 
                         }
                     });
@@ -307,22 +298,100 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-    private void requestContacts()
+    private void getAccessToken(Retrofit retrofitObject)
     {
-        PeopleConnection peopleConnection=new PeopleConnection(authorization_code,Constants.web_client_id,Constants.web_client_secret,Constants.REDIRECT_URI);
+        ServiceAPI serviceAPI=retrofitObject.create(ServiceAPI.class);
 
-        try {
-            peopleConnection.setUp();
-            People linkUser =peopleConnection.getPeopleService();
-            People.PeopleOperations.Connections contacts= linkUser.people().connections();
+        Call<TokenExchangeResponse> request_Token =  serviceAPI.getAccessToken(authorization_code,Constants.REDIRECT_URI,Constants.web_client_id,Constants.web_client_secret,"authorization_code");
+        request_Token.enqueue(new Callback<TokenExchangeResponse>() {
+            @Override
+            public void onResponse(Call<TokenExchangeResponse> call, Response<TokenExchangeResponse> response) {
+                //Log.v("response",response.body().toString());
+                access_token=response.body().getAccess_token();
+                refresh_token=response.body().getAccess_token();
+                Log.v("Token",access_token);
 
-        }
-        catch (IOException ex)
-        {
-            Log.v("Error",ex.toString());
-        }
+                RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
+                Retrofit retrofitObject=retrofitBuilder.getContactsRetrofit();
+
+                retrieveContacts(retrofitObject,access_token);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<TokenExchangeResponse> call, Throwable t) {
+
+                Log.v("TokenFailure",t.toString());
+            }
+        });
     }
+
+    private void retrieveContacts(Retrofit retrofitObject,String access_token)
+    {
+        PeopleAPI peopleAPI=retrofitObject.create(PeopleAPI.class);
+        String bearer_access="Bearer "+access_token;
+        Log.v("Token",bearer_access);
+
+        Call<ServerResponse> request_Contacts=peopleAPI.getContacts("person.names,person.email_addresses",bearer_access);
+        request_Contacts.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                Log.v("Code",Integer.toString(response.code()));
+               if (response.body()!=null)
+               {
+                   ServerResponse serverResponse=new ServerResponse();
+                   serverResponse=response.body();
+                   ArrayList<Connections> contacts=serverResponse.getConnections();
+                   Log.v("Found",response.body().toString());
+                   extractContactDetails(contacts);
+                   TextView contacts_label=(TextView)findViewById(R.id.label_contacts);
+                   contacts_label.setVisibility(View.VISIBLE);
+                   Button contacts_button=(Button)findViewById(R.id.view_user_contacts);
+                   contacts_button.setVisibility(View.INVISIBLE);
+                   contacts_button.setClickable(false);
+               }
+                else
+               {
+                   displayNoContactAlert();
+               }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+
+                Log.v("Error","Retrofit failed");
+
+            }
+        });
+
+
+
+    }
+    private void extractContactDetails(ArrayList<Connections> contacts)
+    {
+            int numberOfContacts=contacts.size();
+            Log.v("Size",Integer.toString(numberOfContacts));
+
+        for (Connections contact:contacts)
+        {
+            String displayName=contact.getNames().get(0).getDisplayName();
+            String emailAddress=contact.getEmailAddresses().get(0).getValue();
+            Person person=new Person(displayName,emailAddress);
+            listAdapter.add(person);
+            listAdapter.notifyDataSetChanged();
+
+        }
+
+    }
+    private void displayNoContactAlert()
+    {
+        Toast.makeText(this,"No Contacts",Toast.LENGTH_SHORT).show();
+    }
+
+
 
 
 

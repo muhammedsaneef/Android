@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LinearLayoutExample</string>
+    <string name="description">This is a linear layout example with vertical orientation.</string>
+    <string name="buttonText">Ok</string>
+    <string name="yourname">Your name</string>
+    <string name="add_me">Add me</string>
+</resources>

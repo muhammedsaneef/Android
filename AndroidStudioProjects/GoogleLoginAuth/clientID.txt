@@ -1,0 +1,7 @@
+220148961812-6ghrqvggvh65e7li7i06iao7fdng7ht0.apps.googleusercontent.com
+
+
+API key:  AIzaSyBda5U35mCxgxSswMP2c0VJTC7S7LKYdZE
+
+
+request : GET https://people.googleapis.com/v1/people/me/connections?pageSize=1&requestMask.includeField=person.names%2Cperson.email_addresses&key={YOUR_API_KEY}
