@@ -11,7 +11,10 @@
     <string name="view_contacts">View Contacts</string>
     <string name="email">Email:</string>
     <string name="user_id_">User ID:</string>
+    <string name="client_id">130005812202-ijp4aqdusen2bojmm77c0afmtpgmvj3p.apps.googleusercontent.com</string>
+    <string name="client_secret">Mcs7BMd_ZlVYFwCwBzId41yA</string>
     <string name="profile_information">Profile Information</string>
     <string name="sign_out_">Sign Out</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="view_user_contacts">View Contacts</string>
 </resources>

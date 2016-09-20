@@ -28,7 +28,7 @@
 
         <item name="android:textColor">@color/toolbar_title_color</item>
         <item name="android:textSize">25sp</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

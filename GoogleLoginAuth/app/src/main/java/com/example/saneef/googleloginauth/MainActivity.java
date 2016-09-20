@@ -1,6 +1,7 @@
 package com.example.saneef.googleloginauth;
 
 
+import android.accounts.AccountManager;
 import android.content.Intent;
 
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,10 +18,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.auth.api.*;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.signin.internal.AuthAccountResult;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.services.people.v1.PeopleScopes;
+
+import java.util.Set;
+
+import RetrofitClass.Constants;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().requestScopes(new Scope(Scopes.PROFILE)).build();
+        googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestServerAuthCode(Constants.web_client_id).requestScopes(new Scope(PeopleScopes.CONTACTS_READONLY)).build();
         googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this,onConnectionFailedListener).addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions).build();
 
 
@@ -69,12 +76,17 @@ public class MainActivity extends AppCompatActivity {
 
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+                Set scopes_given=acct.getGrantedScopes();
+
+            AccountManager accountManager = AccountManager.get(this);
 
 
                 String userDisplayName = acct.getDisplayName();
                 String email = acct.getEmail();
                 String user_id = acct.getId();
+                String authCode=acct.getServerAuthCode();
                 Uri photo_url = acct.getPhotoUrl();
+                Log.v("AuthCode: ",authCode);
 
                loginActivity=new Intent(this,LoginActivity.class);
 
@@ -98,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 loginActivity.putExtra("email", email);
                 loginActivity.putExtra("userID", user_id);
 
-
+                loginActivity.putExtra("auth",authCode);
             //navigate to second activity
             startActivity(loginActivity);
 
