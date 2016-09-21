@@ -21,6 +21,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -169,15 +170,18 @@ public class LoginActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
         //find button views
-        Button view_contacts_button=(Button)findViewById(R.id.view_user_contacts);
+
         FloatingActionButton sign_out_fab =(FloatingActionButton)findViewById(R.id.fab);
+        ImageButton img_contacts=(ImageButton)findViewById(R.id.img_view_contacts);
 
-
-
-        view_contacts_button.setOnClickListener( new View.OnClickListener() {
+        img_contacts.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {createAccessTokenCall();       }
+            public void onClick(View v) {
+                createAccessTokenCall();
+            }
         });
+
+
         sign_out_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,9 +248,13 @@ public class LoginActivity extends AppCompatActivity {
     {
         RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
 
-        Button contacts_button=(Button)findViewById(R.id.view_user_contacts);
-        contacts_button.setVisibility(View.INVISIBLE);
-        contacts_button.setClickable(false);
+
+
+
+        ImageButton imageButton=(ImageButton) findViewById(R.id.img_view_contacts);
+        imageButton.setVisibility(View.INVISIBLE);
+        imageButton.setClickable(false);
+
 
         loadingContacts =new ProgressDialog(LoginActivity.this);
         loadingContacts.setIndeterminate(true);

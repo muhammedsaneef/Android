@@ -7,5 +7,6 @@
     <color name="toolbar_title_color">#f6f7ff</color>
     <color name="fab_color">#9e9fa9</color>
     <color name="info_color">#ffffff</color>
+    <color name="dark_grey">#535252</color>
 
 </resources>
