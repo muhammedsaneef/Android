@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:backgroundTint="@color/info_color"
+    android:background="@color/info_color">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/profile_information"
+    android:textSize="20sp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    />
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="@string/email"
+android:id="@id/emailId"
+android:textSize="15sp"
+android:layout_marginLeft="15dp"
+android:layout_marginBottom="5dp"
+    />
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="@string/user_id_"
+android:id="@id/user_id"
+android:textSize="15sp"
+android:layout_marginLeft="15dp"
+android:layout_marginBottom="5dp"
+    />
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/view_user_contacts"
+android:textAllCaps="false"
+android:text="@string/view_user_contacts"
+android:layout_marginBottom="10dp"
+android:layout_gravity="center_horizontal"
+android:gravity="center" />
+
+
+
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Contacts"
+android:id="@+id/label_contacts"
+android:layout_marginLeft="25dp"
+android:layout_marginBottom="20dp"
+android:visibility="invisible"
+android:textSize="20sp" />
+</LinearLayout>
