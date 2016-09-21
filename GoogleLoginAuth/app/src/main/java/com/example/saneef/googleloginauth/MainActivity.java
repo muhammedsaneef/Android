@@ -48,8 +48,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestServerAuthCode(Constants.web_client_id).requestScopes(new Scope(PeopleScopes.CONTACTS_READONLY),new Scope(PeopleScopes.USERINFO_PROFILE),new Scope(PeopleScopes.PLUS_LOGIN)).build();
-        googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this,onConnectionFailedListener).addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions).build();
+        googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                                    .requestEmail()
+                                                    .requestServerAuthCode(Constants.web_client_id)
+                                                    .requestScopes(new Scope(PeopleScopes.CONTACTS_READONLY),
+                                                                   new Scope(PeopleScopes.USERINFO_PROFILE),
+                                                                   new Scope(PeopleScopes.PLUS_LOGIN))
+                                                    .build();
+        googleApiClient=new GoogleApiClient.Builder(this)
+                                           .enableAutoManage(this,onConnectionFailedListener)
+                                           .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                                           .build();
 
 
     }

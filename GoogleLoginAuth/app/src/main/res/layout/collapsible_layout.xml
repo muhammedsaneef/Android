@@ -35,13 +35,13 @@
                 android:paddingTop="20dp"
 
                 android:layout_gravity="center_horizontal"/>
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/MyToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 android:clickable="true"/>
+
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -125,8 +125,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/icon_logout"
         app:elevation="2dp"
         app:backgroundTint="@color/fab_color"

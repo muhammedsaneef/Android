@@ -1,6 +1,7 @@
 package com.example.saneef.googleloginauth;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ListAdapter listAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
+    private ProgressDialog loadingContacts;
     GoogleSignInOptions googleSignInOptions;
     GoogleApiClient googleApiClient;
     Dialog authorization_window;
@@ -126,6 +127,15 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+    private void authDialogSetup()
+    {
+        authorization_window=new Dialog(LoginActivity.this);
+        authorization_window.setTitle("Grant access");
+        authorization_window.setCancelable(true);
+        authorization_window.setContentView(R.layout.web_authorization_layout);
+        browser=(WebView)authorization_window.findViewById(R.id.browser_view);
+    }
+
 
     private void googleSetup()
     {
@@ -136,14 +146,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void authDialogSetup()
-    {
-        authorization_window=new Dialog(LoginActivity.this);
-        authorization_window.setTitle("Grant access");
-        authorization_window.setCancelable(true);
-        authorization_window.setContentView(R.layout.web_authorization_layout);
-        browser=(WebView)authorization_window.findViewById(R.id.browser_view);
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,8 +154,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.collapsible_layout);
         //configure google sign_in
         googleSetup();
-
-
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_user_contacts);
 
@@ -169,29 +170,13 @@ public class LoginActivity extends AppCompatActivity {
         listAdapter.notifyDataSetChanged();
         //find button views
         Button view_contacts_button=(Button)findViewById(R.id.view_user_contacts);
-       FloatingActionButton sign_out_fab =(FloatingActionButton)findViewById(R.id.fab);
+        FloatingActionButton sign_out_fab =(FloatingActionButton)findViewById(R.id.fab);
 
-       authDialogSetup();
 
-        view_contacts_button.setOnClickListener(new View.OnClickListener() {
+
+        view_contacts_button.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //authorization_window.show();
-                //loadAuthorizationUrl();
-                RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
-
-                Button contacts_button=(Button)findViewById(R.id.view_user_contacts);
-                contacts_button.setVisibility(View.INVISIBLE);
-                contacts_button.setClickable(false);
-
-                Retrofit retrofitObject=retrofitBuilder.getTokenRetrofit();
-
-                    getAccessToken(retrofitObject);
-
-
-
-
-            }
+            public void onClick(View v) {createAccessTokenCall();       }
         });
         sign_out_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,13 +187,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
-
-        //Set Toolbar
-       Toolbar toolbar = (Toolbar) findViewById(R.id.MyToolbar);
+        Toolbar toolbar=(Toolbar)findViewById(R.id.MyToolbar) ;
         setSupportActionBar(toolbar);
-        //toolbar.setTitle("Google");
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         CollapsingToolbarLayout collapsingToolbarLayout =(CollapsingToolbarLayout)findViewById(R.id.collapse_toolbar);
@@ -218,6 +198,14 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent=getIntent();
         Toast.makeText(this,"Signed In",Toast.LENGTH_SHORT).show();
 
+        extractIntentInfoToDisplay(intent);
+
+
+    }
+
+
+    private void extractIntentInfoToDisplay(Intent intent)
+    {
         String message="Profile picture not available.";
         String photo_url=intent.getStringExtra("photo_url");
         String display_name=intent.getStringExtra("displayName");
@@ -243,10 +231,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         String textToDisplay;
-        //=(display_name_field.getText().toString()+" "+display_name);
-        //display_name_field.setText(textToDisplay);
-        //Set profile name
-
+        CollapsingToolbarLayout collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.collapse_toolbar);
         collapsingToolbarLayout.setTitle(display_name);
 
         //extract other info
@@ -254,9 +239,24 @@ public class LoginActivity extends AppCompatActivity {
         email_id_field.setText(textToDisplay);
         textToDisplay=user_id_field.getText().toString()+" "+user_id;
         user_id_field.setText(textToDisplay);
-
     }
+    private void createAccessTokenCall()
+    {
+        RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
 
+        Button contacts_button=(Button)findViewById(R.id.view_user_contacts);
+        contacts_button.setVisibility(View.INVISIBLE);
+        contacts_button.setClickable(false);
+
+        loadingContacts =new ProgressDialog(LoginActivity.this);
+        loadingContacts.setIndeterminate(true);
+        loadingContacts.setMessage("Loading Contacts...");
+        loadingContacts.show();
+
+        Retrofit retrofitObject=retrofitBuilder.getTokenRetrofit();
+
+        getAccessToken(retrofitObject);
+    }
 
     public void setProfilePicture(ImageView v, Uri uri)
     {
@@ -312,13 +312,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<TokenExchangeResponse> call, Response<TokenExchangeResponse> response) {
                 //Log.v("response",response.body().toString());
                 access_token=response.body().getAccess_token();
-                refresh_token=response.body().getAccess_token();
-                Log.v("Token",access_token);
-
+                refresh_token=response.body().getRefresh_token();
+                Log.v("AccessToken",access_token);
+                Log.v("RefreshToken",access_token);
                 RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
                 Retrofit retrofitObject=retrofitBuilder.getContactsRetrofit();
 
                 retrieveContacts(retrofitObject,access_token);
+
+
 
 
             }
@@ -340,11 +342,16 @@ public class LoginActivity extends AppCompatActivity {
         Call<ServerResponse> request_Contacts=peopleAPI.getContacts("person.names,person.email_addresses",bearer_access);
         request_Contacts.enqueue(new Callback<ServerResponse>() {
             @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response)
+            {
                 Log.v("Code",Integer.toString(response.code()));
                if (response.body()!=null)
                {
-                   ServerResponse serverResponse=new ServerResponse();
+                   if(loadingContacts.isShowing())
+                   {
+                       loadingContacts.dismiss();
+                   }
+                   ServerResponse serverResponse;
                    serverResponse=response.body();
                    ArrayList<Connections> contacts=serverResponse.getConnections();
                    Log.v("Found",response.body().toString());
@@ -355,7 +362,11 @@ public class LoginActivity extends AppCompatActivity {
                }
                 else
                {
-                   displayNoContactAlert();
+
+                   if(loadingContacts.isShowing())
+                   {
+                       loadingContacts.dismiss();
+                   }
                }
 
 
@@ -365,6 +376,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<ServerResponse> call, Throwable t) {
 
                 Log.v("Error","Retrofit failed");
+                if(loadingContacts.isShowing())
+                {
+                    loadingContacts.dismiss();
+                }
 
             }
         });
@@ -374,8 +389,10 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void extractContactDetails(ArrayList<Connections> contacts)
     {
-            int numberOfContacts=contacts.size();
-            Log.v("Size",Integer.toString(numberOfContacts));
+        if(contacts!=null)
+        {
+            int numberOfContacts = contacts.size();
+            Log.v("Size", Integer.toString(numberOfContacts));
 
         for (Connections contact:contacts)
         {
@@ -403,12 +420,22 @@ public class LoginActivity extends AppCompatActivity {
                 listAdapter.notifyDataSetChanged();
 
         }
+        }
+        else
+        {
+
+            if(loadingContacts.isShowing())
+            {
+                loadingContacts.dismiss();
+            }
+            Person person = new Person("No Contacts", "");
+
+            listAdapter.add(person);
+            listAdapter.notifyDataSetChanged();
+        }
 
     }
-    private void displayNoContactAlert()
-    {
-        Toast.makeText(this,"No Contacts",Toast.LENGTH_SHORT).show();
-    }
+
 
 
 
