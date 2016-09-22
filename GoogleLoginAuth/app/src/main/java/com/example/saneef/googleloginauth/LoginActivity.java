@@ -314,15 +314,15 @@ public class LoginActivity extends AppCompatActivity {
     {
         ServiceAPI serviceAPI=retrofitObject.create(ServiceAPI.class);
 
-        Call<TokenExchangeResponse> request_Token =  serviceAPI.getAccessToken(authorization_code,Constants.REDIRECT_URI,Constants.web_client_id,Constants.web_client_secret,"authorization_code");
+        final Call<TokenExchangeResponse> request_Token =  serviceAPI.getAccessToken(authorization_code,Constants.REDIRECT_URI,Constants.web_client_id,Constants.web_client_secret,"authorization_code");
         request_Token.enqueue(new Callback<TokenExchangeResponse>() {
             @Override
             public void onResponse(Call<TokenExchangeResponse> call, Response<TokenExchangeResponse> response) {
-                //Log.v("response",response.body().toString());
+
                 access_token=response.body().getAccess_token();
                 refresh_token=response.body().getRefresh_token();
                 Log.v("AccessToken",access_token);
-                Log.v("RefreshToken",access_token);
+                Log.v("RefreshToken",refresh_token);
                 RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
                 Retrofit retrofitObject=retrofitBuilder.getContactsRetrofit();
 
@@ -337,10 +337,22 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<TokenExchangeResponse> call, Throwable t) {
 
                 Log.v("TokenFailure",t.toString());
+                if (loadingContacts.isShowing())
+                {
+                    loadingContacts.dismiss();
+                }
+                ImageButton view_contacts=(ImageButton) findViewById(R.id.img_view_contacts);
+                view_contacts.setClickable(true);
+                view_contacts.setVisibility(View.VISIBLE);
+                noInternetConnectionAlert();
             }
         });
     }
 
+    private void noInternetConnectionAlert()
+    {
+        Toast.makeText(this,"Network unavailable",Toast.LENGTH_SHORT).show();
+    }
     private void retrieveContacts(Retrofit retrofitObject,String access_token)
     {
         PeopleAPI peopleAPI=retrofitObject.create(PeopleAPI.class);

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         googleSignInOptions= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                                     .requestEmail()
-                                                    .requestServerAuthCode(Constants.web_client_id)
+                                                    .requestServerAuthCode(Constants.web_client_id,true)
                                                     .requestScopes(new Scope(PeopleScopes.CONTACTS_READONLY),
                                                                    new Scope(PeopleScopes.USERINFO_PROFILE),
                                                                    new Scope(PeopleScopes.PLUS_LOGIN))

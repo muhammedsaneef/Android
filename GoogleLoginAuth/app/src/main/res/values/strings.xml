@@ -17,4 +17,5 @@
     <string name="sign_out_">Sign Out</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="view_user_contacts">View Contacts</string>
+    <string name="contacts">Contacts</string>
 </resources>
