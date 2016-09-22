@@ -2,8 +2,10 @@ package com.example.saneef.googleloginauth;
 
 
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 
+import android.content.res.Resources;
 import android.net.Uri;
 
 import android.support.v7.app.AppCompatActivity;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
+        
 
     }
     @Override

@@ -39,15 +39,12 @@ android:layout_marginLeft="15dp"
 android:layout_marginBottom="5dp"
     android:paddingTop="10dp"
     />
-
-<ImageButton
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:id="@+id/img_view_contacts"
-    android:src="@drawable/ic_contacts_black_24dp"
-    android:layout_gravity="center_horizontal"
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    />
+    >
+
 
 <TextView
 android:layout_width="wrap_content"
@@ -55,12 +52,30 @@ android:layout_height="wrap_content"
 android:text="@string/contacts"
 android:id="@+id/label_contacts"
 android:layout_marginLeft="10dp"
-android:layout_marginBottom="5dp"
-    android:layout_marginTop="10dp"
+android:paddingBottom="5dp"
+    android:paddingTop="10dp"
 
+
+
+android:visibility="invisible"
 android:textSize="20sp" />
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/img_view_contacts"
+        android:src="@drawable/ic_contacts_black_24dp"
+
+        android:backgroundTint="@color/toolbar_title_color"
+
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/dark_grey"/>
+        android:background="@color/dark_grey"
+       />
+
+
 </LinearLayout>
