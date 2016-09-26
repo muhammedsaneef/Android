@@ -41,8 +41,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,int viewType)
+    {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact, parent, false);
         // set the view's size, margins, paddings and layout parameters

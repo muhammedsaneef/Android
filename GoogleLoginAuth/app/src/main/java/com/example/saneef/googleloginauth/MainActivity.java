@@ -1,11 +1,11 @@
 package com.example.saneef.googleloginauth;
 
 
-import android.accounts.AccountManager;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 
-import android.content.res.Resources;
+
 import android.net.Uri;
 
 import android.support.v7.app.AppCompatActivity;
@@ -23,9 +23,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.auth.api.*;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.signin.internal.AuthAccountResult;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.services.people.v1.People;
+
+
 import com.google.api.services.people.v1.PeopleScopes;
 
 import java.util.Set;
@@ -38,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     GoogleSignInOptions googleSignInOptions;
     GoogleApiClient googleApiClient;
-
+    ProgressDialog mProgressDialog;
     GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener;
     Intent loginActivity;
+
 
 
     @Override
@@ -65,11 +65,68 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        Log.v("Started","Done");
+    }
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        if (mProgressDialog!=null)
+        {
+            if(mProgressDialog.isShowing())
+            {
+                mProgressDialog.dismiss();
+            }
+        }
+        Log.v("Stopped","Done");
+    }
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mProgressDialog =new ProgressDialog(MainActivity.this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Please wait..");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+        Log.v("Paused","Done");
+    }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if (mProgressDialog!=null)
+        {
+            if(mProgressDialog.isShowing())
+            {
+                            mProgressDialog.dismiss();
+            }
+        }
+        Log.v("Resumed","Done");
+    }
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.v("Destroyed","Done");
+    }
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        Log.v("Restarted","Done");
+    }
+
     public void performGoogleAuthentication(View v)
     {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent,RC_SIGN_IN);
-        
+
 
     }
     @Override

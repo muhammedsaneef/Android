@@ -14,7 +14,8 @@ public interface PeopleAPI {
 
     @GET("/v1/people/me/connections")
     @Headers({"Content-length: 0"})
-    Call<ServerResponse> getContacts(@Query("requestMask.includeField") String request_mask,@Header("Authorization")String bearer_access);
+    Call<ServerResponse> getContacts(@Query("requestMask.includeField") String request_mask,
+                                     @Header("Authorization")String bearer_access);
 
 
 

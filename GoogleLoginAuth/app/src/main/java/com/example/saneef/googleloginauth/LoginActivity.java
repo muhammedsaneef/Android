@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -20,7 +20,8 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
+
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,11 +39,13 @@ import com.google.android.gms.common.api.ResultCallback;
 
 import com.google.android.gms.common.api.Status;
 
-import com.google.api.services.people.v1.People;
+
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import RetrofitClass.Constants;
 import RetrofitClass.JsonModel.Connections;
@@ -50,19 +53,20 @@ import RetrofitClass.JsonModel.PeopleAPI;
 import RetrofitClass.JsonModel.Person;
 import RetrofitClass.JsonModel.ServerResponse;
 import RetrofitClass.JsonModel.TokenExchangeResponse;
+import RetrofitClass.ProfileData;
 import RetrofitClass.RetrofitBuilder;
 import RetrofitClass.ServiceAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
 
 
 public class LoginActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private ListAdapter listAdapter;
+    //private ExpandableListAdapter listAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressDialog loadingContacts;
     GoogleSignInOptions googleSignInOptions;
@@ -73,6 +77,13 @@ public class LoginActivity extends AppCompatActivity {
     private String access_token;
     private String refresh_token;
     private String authorization_code;
+
+
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    List<String> listDataHeader;
+    Map<String, List<ProfileData>> listDataChild;
+
 
     private void loadAuthorizationUrl()
     {
@@ -156,30 +167,38 @@ public class LoginActivity extends AppCompatActivity {
         //configure google sign_in
         googleSetup();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_user_contacts);
+      /*  mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_user_contacts);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        ArrayList<Person> contacts=new ArrayList<>();
+        ArrayList<Person> contacts=new ArrayList<>();*/
 
+        expListView = (ExpandableListView) findViewById(R.id.exapndable_list_view);
 
+        // preparing list data
+        listDataHeader = new ArrayList<>();
 
-        listAdapter= new ListAdapter(contacts);
-        mRecyclerView.setAdapter(listAdapter);
-        listAdapter.notifyDataSetChanged();
+        listDataHeader.add("Profile Info");
+        listDataHeader.add("Contacts");
+        listDataChild=new HashMap<>();
+
+        //listAdapter= new ListAdapter(contacts);
+       // mRecyclerView.setAdapter(listAdapter);
+        //listAdapter.notifyDataSetChanged();
         //find button views
 
         FloatingActionButton sign_out_fab =(FloatingActionButton)findViewById(R.id.fab);
-        ImageButton img_contacts=(ImageButton)findViewById(R.id.img_view_contacts);
+       // ImageButton img_contacts=(ImageButton)findViewById(R.id.img_view_contacts);
 
-        img_contacts.setOnClickListener(new View.OnClickListener() {
+       /* img_contacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createAccessTokenCall();
             }
         });
+*/
 
 
         sign_out_fab.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +227,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
     private void extractIntentInfoToDisplay(Intent intent)
     {
         String message="Profile picture not available.";
@@ -227,34 +247,45 @@ public class LoginActivity extends AppCompatActivity {
         {
             Toast.makeText(this,"Profile picture failed",Toast.LENGTH_SHORT).show();
         }
-        //set details
-        //TextView display_name_field=(TextView)findViewById(R.id.displayName);
+
+        List<ProfileData> profileDatas=new ArrayList<ProfileData>();
+        ProfileData emailInfo= new ProfileData("Email",email_id);
+        profileDatas.add(emailInfo);
+        ProfileData userIDInfo= new ProfileData("UserID",user_id);
+        profileDatas.add(userIDInfo);
+
+        listDataChild.put(listDataHeader.get(0),profileDatas);
+        /*
         TextView email_id_field=(TextView)findViewById(R.id.emailId);
-        TextView user_id_field=(TextView)findViewById(R.id.user_id);
+        TextView user_id_field=(TextView)findViewById(R.id.user_id);*/
+        listAdapter = new ExpandableListAdapter(LoginActivity.this, listDataHeader, listDataChild);
 
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
 
+        createAccessTokenCall();
 
         String textToDisplay;
         CollapsingToolbarLayout collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.collapse_toolbar);
         collapsingToolbarLayout.setTitle(display_name);
 
         //extract other info
-        textToDisplay=email_id_field.getText().toString()+" "+email_id;
+       /* textToDisplay=email_id_field.getText().toString()+" "+email_id;
         email_id_field.setText(textToDisplay);
         textToDisplay=user_id_field.getText().toString()+" "+user_id;
-        user_id_field.setText(textToDisplay);
+        user_id_field.setText(textToDisplay);*/
     }
     private void createAccessTokenCall()
     {
         RetrofitBuilder retrofitBuilder=new RetrofitBuilder();
 
 
-
+/*
 
         ImageButton imageButton=(ImageButton) findViewById(R.id.img_view_contacts);
         imageButton.setVisibility(View.INVISIBLE);
         imageButton.setClickable(false);
-
+*/
 
         loadingContacts =new ProgressDialog(LoginActivity.this);
         loadingContacts.setIndeterminate(true);
@@ -310,6 +341,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
+
     private void getAccessToken(Retrofit retrofitObject)
     {
         ServiceAPI serviceAPI=retrofitObject.create(ServiceAPI.class);
@@ -341,9 +374,8 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     loadingContacts.dismiss();
                 }
-                ImageButton view_contacts=(ImageButton) findViewById(R.id.img_view_contacts);
-                view_contacts.setClickable(true);
-                view_contacts.setVisibility(View.VISIBLE);
+
+
                 noInternetConnectionAlert();
             }
         });
@@ -376,8 +408,7 @@ public class LoginActivity extends AppCompatActivity {
                    ArrayList<Connections> contacts=serverResponse.getConnections();
                    Log.v("Found",response.body().toString());
                    extractContactDetails(contacts);
-                   TextView contacts_label=(TextView)findViewById(R.id.label_contacts);
-                   contacts_label.setVisibility(View.VISIBLE);
+
 
                }
                 else
@@ -409,6 +440,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void extractContactDetails(ArrayList<Connections> contacts)
     {
+        List<ProfileData> contactsOfuser=new ArrayList<>();
         if(contacts!=null)
         {
             int numberOfContacts = contacts.size();
@@ -434,12 +466,14 @@ public class LoginActivity extends AppCompatActivity {
             }
 
 
-                Person person = new Person(displayName, emailAddress);
+                ProfileData contact_object = new ProfileData(displayName, emailAddress);
 
-                listAdapter.add(person);
-                listAdapter.notifyDataSetChanged();
+              contactsOfuser.add(contact_object);
+
 
         }
+            listDataChild.put(listDataHeader.get(1),contactsOfuser);
+            listAdapter.notifyDataSetChanged();
         }
         else
         {
@@ -448,9 +482,10 @@ public class LoginActivity extends AppCompatActivity {
             {
                 loadingContacts.dismiss();
             }
-            Person person = new Person("No Contacts", "");
-
-            listAdapter.add(person);
+            ProfileData contact_object = new ProfileData("No Contacts", "");
+            contactsOfuser.add(contact_object);
+           // listAdapter.add(person);
+            listDataChild.put(listDataHeader.get(1),contactsOfuser);
             listAdapter.notifyDataSetChanged();
         }
 
